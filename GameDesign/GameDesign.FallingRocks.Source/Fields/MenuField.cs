@@ -31,7 +31,7 @@
                 menuCategories,
                 MenuField.TextFieldWidth,
                 MenuField.TextFieldHeight);
-            this.currentHighlightCategory = menuFieldByName["Resume"];
+            this.currentHighlightCategory = this.menuFieldByName["Resume"];
         }
 
         public ITextMenuField CurrentSelect => this.currentHighlightCategory;
@@ -53,6 +53,7 @@
                 this.currentHighlightCategory =
                     this.menuFieldByName[((MenuCategory)categoryNum).MenuCategoryAsString()];
             }
+
             // TODO: Initialize execution plan ...
         }
 
@@ -71,16 +72,7 @@
                 this.currentHighlightCategory =
                     this.menuFieldByName[((MenuCategory)categoryNum).MenuCategoryAsString()];
             }
-            // TODO: Initialize execution plan ...
-        }
 
-        public void ConfirmChoise()
-        {
-            // TODO: Initialize execution plan ...
-        }
-
-        public void BackToPrevious()
-        {
             // TODO: Initialize execution plan ...
         }
 

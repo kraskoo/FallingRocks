@@ -16,6 +16,7 @@
         private int playerScoreX;
         private int playerLivesX;
         private int currentFrames;
+        private string nextStateName;
 
         public PlayState(
             IContextExtendable gameContext,
@@ -25,11 +26,16 @@
             this.currentPlayerScores = this.PlayField.Player.Score;
             this.currentPlayerLives = this.PlayField.Player.Lives;
             this.currentFrames = 0;
+            this.nextStateName = typeof(MenuState).Name;
         }
 
         public IPlayField PlayField { get; }
 
-        public override string NextStateName => typeof(MenuState).Name;
+        public override string NextStateName
+        {
+            get { return this.nextStateName; }
+            protected set { this.nextStateName = value; }
+        }
 
         public sealed override bool IsCurrentStateRunning { get; protected set; }
 
@@ -61,7 +67,7 @@
                     this.currentFrames = 0;
                 }
 
-                this.GetBackCursorToPrevious();
+                this.GetBackCursorToSafePosition();
                 
                 while (this.Context.KeyProvider.HasPressedKey)
                 {
@@ -216,7 +222,6 @@
                     this.Context.Drawer.EnqueueDrawAction(Color.LightGray, x, startY, ' ', true);
                     if (x < startX + lives.Length)
                     {
-
                         this.Context.Drawer.EnqueueDrawAction(
                         this.Context.Drawer.DefaultForeground,
                         x,

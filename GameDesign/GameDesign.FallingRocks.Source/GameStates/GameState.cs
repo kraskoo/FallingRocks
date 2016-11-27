@@ -21,7 +21,7 @@
 
         public IGameStateExtendable PreviousState { get; private set; }
 
-        public abstract string NextStateName { get; }
+        public abstract string NextStateName { get; protected set; }
 
         public abstract bool IsCurrentStateRunning { get; protected set; }
 
@@ -38,7 +38,12 @@
             this.PreviousState = previousState;
         }
 
-        protected void GetBackCursorToPrevious()
+        public override string ToString()
+        {
+            return this.GetType().Name;
+        }
+
+        protected void GetBackCursorToSafePosition()
         {
             this.Context
                 .Drawer

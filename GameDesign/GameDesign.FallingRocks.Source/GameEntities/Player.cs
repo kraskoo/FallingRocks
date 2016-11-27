@@ -1,8 +1,7 @@
-﻿using GameDesign.Source;
-
-namespace GameDesign.FallingRocks.Source.GameEntities
+﻿namespace GameDesign.FallingRocks.Source.GameEntities
 {
     using Common;
+    using GameDesign.Source;
     using GameDesign.Source.Enumerations;
     using GameDesign.Source.Interfaces;
     using Interfaces;

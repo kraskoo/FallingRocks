@@ -9,14 +9,21 @@
 
     public class MenuState : GameState, IMenuState
     {
+        private string nextStateName;
+
         public MenuState(IContextExtendable gameContext, IMenuField menuField) : base(gameContext)
         {
             this.MenuField = menuField;
+            this.nextStateName = typeof(MenuState).Name;
         }
 
         public IMenuField MenuField { get; }
 
-        public override string NextStateName => typeof(PlayState).Name;
+        public override string NextStateName
+        {
+            get { return this.nextStateName; }
+            protected set { this.nextStateName = value; }
+        }
 
         public override IDictionary<Key, Action> ActionByKey => this.DefaultActionKey();
 
@@ -43,7 +50,7 @@
             this.IsCurrentStateRunning = true;
             this.InitialDraw();
             DrawerExtension.ExecuteDraweres();
-            this.GetBackCursorToPrevious();
+            this.GetBackCursorToSafePosition();
             while (this.IsCurrentStateRunning)
             {
                 if (this.Context.KeyProvider.HasPressedKey)
@@ -53,20 +60,35 @@
 
                 this.Context.Drawer.SetBackground(this.Context.Drawer.DefaultBackground);
                 this.Context.Drawer.SetForeground(this.Context.Drawer.DefaultForeground);
-                this.GetBackCursorToPrevious();
+                this.GetBackCursorToSafePosition();
             }
 
             this.ChangeState();
+        }
+
+        public void ConfirmChoise()
+        {
+            // TODO: Initialize execution plan ...
+        }
+
+        public void BackToPrevious()
+        {
+            this.Context.Drawer.Clear();
+            this.ChangeNextToPreviousState();
+            this.IsCurrentStateRunning = false;
+            this.Context.StartContext()();
         }
 
         private void InitialDraw()
         {
             foreach (var menuField in this.MenuField.MenuFields)
             {
+                Color background =
+                    this.CheckIfMenuFieldIsCurrentSelected(menuField) ? Color.White : Color.Yellow;
                 this.DrawTextMenuField(
                     menuField,
-                    this.CheckIfMenuFieldIsCurrentSelected(menuField) ?
-                    Color.White : Color.Yellow, Color.Black);
+                    background,
+                    Color.Black);
             }
         }
 
@@ -115,45 +137,56 @@
             }
         }
 
+        private void ChangeNextToPreviousState()
+        {
+            this.Context
+                .ChangeState(this.PreviousState.ToString())
+                .SetPreviousState(this);
+        }
+
         private IDictionary<Key, Action> DefaultActionKey()
         {
             return new Dictionary<Key, Action>
             {
                 { Key.Down, this.MoveOnNextPosition },
                 { Key.Up, this.MoveOnPreviousPosition },
-                { Key.Escape, this.MenuField.BackToPrevious },
-                { Key.Enter, this.MenuField.ConfirmChoise }
+                { Key.Escape, this.BackToPrevious },
+                { Key.Enter, this.ConfirmChoise }
             };
         }
 
         private void MoveOnNextPosition()
         {
             this.DrawTextMenuField(
-                this.MenuField
-                .GetMenuFieldByName(this.MenuField.CurrentSelect.Representation),
-                Color.Yellow, Color.Black);
+                this.CurrentMenuFieldName(),
+                Color.Yellow,
+                Color.Black);
             this.MenuField.MoveOnNextPosition();
             this.DrawTextMenuField(
-                this.MenuField
-                .GetMenuFieldByName(this.MenuField.CurrentSelect.Representation),
-                Color.White, Color.Black);
+                this.CurrentMenuFieldName(),
+                Color.White,
+                Color.Black);
             DrawerExtension.ExecuteDraweres();
-            this.GetBackCursorToPrevious();
         }
 
         private void MoveOnPreviousPosition()
         {
             this.DrawTextMenuField(
-                this.MenuField
-                .GetMenuFieldByName(this.MenuField.CurrentSelect.Representation),
-                Color.Yellow, Color.Black);
+                this.CurrentMenuFieldName(),
+                Color.Yellow,
+                Color.Black);
             this.MenuField.MoveOnPreviousPosition();
             this.DrawTextMenuField(
-                this.MenuField
-                .GetMenuFieldByName(this.MenuField.CurrentSelect.Representation),
-                Color.White, Color.Black);
+                this.CurrentMenuFieldName(),
+                Color.White,
+                Color.Black);
             DrawerExtension.ExecuteDraweres();
-            this.GetBackCursorToPrevious();
+        }
+
+        private ITextMenuField CurrentMenuFieldName()
+        {
+            return this.MenuField
+                .GetMenuFieldByName(this.MenuField.CurrentSelect.Representation);
         }
     }
 }

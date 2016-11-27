@@ -12,10 +12,6 @@
 
         void MoveOnPreviousPosition();
 
-        void ConfirmChoise();
-
-        void BackToPrevious();
-
         ITextMenuField GetMenuFieldByName(string name);
     }
 }

@@ -31,8 +31,6 @@
 
         public IDrawer Drawer { get; }
 
-        public IPosition LastCursorPosition { get; }
-
         public IDictionary<string, IGameStateExtendable> StateByName =>
             new Dictionary<string, IGameStateExtendable>
             {

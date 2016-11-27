@@ -5,8 +5,6 @@
 
     public interface IContextExtendable : IGameContext
     {
-        IPosition LastCursorPosition { get; }
-
         IDictionary<string, IGameStateExtendable> StateByName { get; }
 
         IGameStateExtendable ChangeState(string nameOfState);

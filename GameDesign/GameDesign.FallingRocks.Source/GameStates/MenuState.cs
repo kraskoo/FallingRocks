@@ -32,6 +32,7 @@
 
         public override void ChangeState()
         {
+            this.IsCurrentStateRunning = false;
             this.Context.Drawer.Clear();
             this.Context.ChangeState(this.NextStateName).SetPreviousState(this);
             this.Context.StartContext()();

@@ -85,6 +85,7 @@
 
         public override void ChangeState()
         {
+            this.IsCurrentStateRunning = false;
             this.ExecuteDrawers();
             this.ExecuteDrawers(true);
             this.Context.Drawer.Clear();

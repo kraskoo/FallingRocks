@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace GameDesign.Source.Common
+﻿namespace GameDesign.Source.Common
 {
     public static class MathExtension
     {

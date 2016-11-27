@@ -159,29 +159,32 @@
             int startY = this.PlayField.StartY;
             this.playerScoreX = scoreRow.Length + startX;
             this.playerLivesX = liveRow.Length + startX;
-            scoreRow = $"{scoreRow}{this.PlayField.Player.Score}";
-            liveRow = $"{liveRow}{this.PlayField.Player.Lives}";
-            int scoreLength = scoreRow.Length + startX;
-            int liveRowLength = liveRow.Length + startX;
-            for (int x = startX; x < scoreLength; x++)
-            {
-                this.Context.Drawer.EnqueueDrawAction(
-                    this.Context.Drawer.DefaultForeground,
-                    x,
-                    startY,
-                    scoreRow[x - startX],
-                    true);
-            }
-            
-            startY++;
+            this.DrawResultPart(startX, this.playerScoreX, startY, scoreRow, Color.LightGray);
+            this.DrawResultPart(startX, this.playerLivesX, startY + 1, liveRow, Color.LightGray);
+            scoreRow = $"{this.PlayField.Player.Score}";
+            liveRow = $"{this.PlayField.Player.Lives}";
+            int scoreStart = this.playerScoreX;
+            int liveStart = this.playerLivesX;
+            int scoreLength = scoreStart + $"{this.PlayField.Player.Score}".Length;
+            int liveRowLength = liveStart + $"{this.PlayField.Player.Lives}".Length;
+            this.DrawResultPart(scoreStart, scoreLength, startY, scoreRow, Color.White);
+            this.DrawResultPart(liveStart, liveRowLength, startY + 1, liveRow, Color.White);
+        }
 
-            for (int x = startX; x < liveRowLength; x++)
+        private void DrawResultPart(
+            int startX,
+            int length,
+            int startY,
+            string representation,
+            Color color)
+        {
+            for (int x = startX; x < length; x++)
             {
                 this.Context.Drawer.EnqueueDrawAction(
-                    this.Context.Drawer.DefaultForeground,
+                    color,
                     x,
                     startY,
-                    liveRow[x - startX],
+                    representation[x - startX],
                     true);
             }
         }
@@ -197,11 +200,11 @@
                 string score = this.currentPlayerScores.ToString();
                 for (int x = startX; x < length; x++)
                 {
-                    this.Context.Drawer.EnqueueDrawAction(Color.LightGray, x, startY, ' ', true);
+                    this.Context.Drawer.EnqueueDrawAction(Color.Black, x, startY, ' ', true);
                     if (x < startX + score.Length)
                     {
                         this.Context.Drawer.EnqueueDrawAction(
-                        this.Context.Drawer.DefaultForeground,
+                        Color.White,
                         x,
                         startY,
                         score[x - startX],
@@ -219,11 +222,11 @@
                 string lives = this.currentPlayerLives.ToString();
                 for (int x = startX; x < length; x++)
                 {
-                    this.Context.Drawer.EnqueueDrawAction(Color.LightGray, x, startY, ' ', true);
+                    this.Context.Drawer.EnqueueDrawAction(Color.Black, x, startY, ' ', true);
                     if (x < startX + lives.Length)
                     {
                         this.Context.Drawer.EnqueueDrawAction(
-                        this.Context.Drawer.DefaultForeground,
+                        Color.White,
                         x,
                         startY,
                         lives[x - startX],

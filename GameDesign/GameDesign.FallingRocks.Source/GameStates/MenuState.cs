@@ -68,7 +68,7 @@
 
         public void ConfirmChoise()
         {
-            // TODO: Initialize execution plan ...
+            this.ManageChoiseAction();
         }
 
         public void BackToPrevious()
@@ -187,6 +187,37 @@
         {
             return this.MenuField
                 .GetMenuFieldByName(this.MenuField.CurrentSelect.Representation);
+        }
+
+        private void ManageChoiseAction()
+        {
+            switch (this.MenuField.CurrentSelect.Representation.GetMenuCategoryByName())
+            {
+                case MenuCategory.Resume:
+                    this.BackToPrevious();
+                    break;
+                case MenuCategory.NewGame:
+                    this.Restart();
+                    break;
+                case MenuCategory.Options:
+                    // TODO: Realization of some logic
+                    break;
+                case MenuCategory.Exit:
+                    this.Exit();
+                    break;
+            }
+        }
+
+        private void Exit()
+        {
+            this.Context.Drawer.Clear();
+            Environment.Exit(Environment.ExitCode);
+        }
+
+        private void Restart()
+        {
+            this.Context.Drawer.Clear();
+            this.Context.Restart();
         }
     }
 }

@@ -10,5 +10,7 @@
         IGameStateExtendable ChangeState(string nameOfState);
 
         void UpdateBeforeChangeState(IPlayField playField, IPlayer player);
+
+        void Restart();
     }
 }

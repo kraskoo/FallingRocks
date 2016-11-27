@@ -34,10 +34,17 @@
 
         public void ResolveEngineDependencies()
         {
+            Console.CursorVisible = false;
             var player = this.InitializePlayer();
             IKeyProvider keyProvider = new ConsoleInputHandler();
             var drawer = this.InitializeDrawer();
-            var gameContext = this.InitializeGame(keyProvider, drawer, player);
+            Action restart = () =>
+            {
+                this.ResolveEngineDependencies();
+                this.fallingRocksEngine.StartGame();
+            };
+
+            var gameContext = this.InitializeGame(keyProvider, restart, drawer, player);
             this.fallingRocksEngine.Initialize(gameContext);
         }
 
@@ -66,10 +73,10 @@
         }
 
         private IContextExtendable InitializeGame(
-            IKeyProvider keyProvider, IDrawer drawer, IPlayer player)
+            IKeyProvider keyProvider, Action restart, IDrawer drawer, IPlayer player)
         {
             var gameContext = new GameContext(
-                keyProvider, drawer, WindowWidth, WindowHeight);
+                keyProvider, restart, drawer, WindowWidth, WindowHeight);
             IPlayField playField = new PlayField(
                 drawer,
                 player,

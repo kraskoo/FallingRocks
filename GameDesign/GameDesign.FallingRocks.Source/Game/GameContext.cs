@@ -9,6 +9,7 @@
 
     public class GameContext : IContextExtendable
     {
+        private readonly Action restart;
         private readonly int widowWidth;
         private readonly int windowHeight;
         private IGameStateExtendable currentState;
@@ -17,11 +18,13 @@
 
         public GameContext(
             IKeyProvider keyProvider,
+            Action restart,
             IDrawer drawer,
             int windowWidth,
             int windowHeight)
         {
             this.KeyProvider = keyProvider;
+            this.restart = restart;
             this.Drawer = drawer;
             this.widowWidth = windowWidth;
             this.windowHeight = windowHeight;
@@ -80,6 +83,11 @@
         {
             this.playField = updatePlayField;
             this.player = updatePlayer;
+        }
+
+        public void Restart()
+        {
+            this.restart();
         }
     }
 }
